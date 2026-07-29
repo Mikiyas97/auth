@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Database
+*.db
+*.sqlite3
+
+# Firebase credentials (CRITICAL: DO NOT COMMIT!)
+firebase-adminsdk.json
+
+# Flask session
+flask_session/
+
+# OS generated files
+.DS_Store
+Thumbs.db

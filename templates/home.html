@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container home-container">
+
+        <h1>Welcome</h1>
+
+        <div class="card">
+            <h2>Hello, {{name}}!</h2>
+            <p>You have successfully logged in.</p>
+        </div>
+
+        <div class="card">
+            <h2>Active Sessions</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Device</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for s in sessions %}
+                    <tr>
+                        <td>{{ s[2] }} <br><small style="color: gray; font-size: 0.8em;">Started: {{ s[4] }}</small></td>
+                        <td>{{ s[3] }}</td>
+                        <td>
+                            {% if s[0]|int == current_session_id|int %}
+                                <span style="color: #4CAF50; font-weight: bold;">Current Session</span>
+                            {% else %}
+                                <span>Active</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">No active sessions found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+
+    </div>
+
+</body>
+
+</html>
