@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In / Sign Up</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="auth-page">
+
+    <div class="container {% if show_register %}right-panel-active{% endif %}" id="container">
+
+        <!-- Sign Up Form -->
+
+        <div class="form-container sign-up-container">
+
+            <form id="register_form" action="/register" method="POST">
+
+                <h1>Create Account</h1>
+
+
+                <div id="message" class="error-message"></div>
+
+                <input type="text" name="name" placeholder="Name" required>
+
+                <input type="email" name="email" placeholder="Email" required>
+
+                <input type="password" id="password" name="password" placeholder="Password" required>
+
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password"
+                    required>
+
+                <button type="submit" id="register_btn">
+                    Sign Up
+                </button>
+
+                <button type="button" class="google-signin-btn">
+                    <i class="fa-brands fa-google" style="margin-right: 5px;"></i> Google
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Sign In Form -->
+
+        <div class="form-container sign-in-container">
+
+            <form id="login_form" action="/login" method="POST">
+
+                <h1>Sign In</h1>
+
+
+
+                <input type="email" name="email" placeholder="Email" required>
+
+                <input type="password" name="password" placeholder="Password" required>
+
+                <a href="#">
+                    Forgot your password?
+                </a>
+
+                <button type="submit" id="login_btn">
+                    Sign In
+                </button>
+
+                <button type="button" class="google-signin-btn">
+                    <i class="fa-brands fa-google" style="margin-right: 5px;"></i> Google
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Animated Overlay -->
+
+        <div class="overlay-container">
+
+            <div class="overlay">
+
+                <!-- Left Overlay -->
+
+                <div class="overlay-panel overlay-left">
+
+                    <h1>
+                        Welcome Back!
+                    </h1>
+
+                    <p>
+                        please Sign-In to continue.
+                    </p>
+
+                    <button class="ghost" id="signIn" type="button">
+                        Sign In
+                    </button>
+
+                </div>
+
+
+                <!-- Right Overlay -->
+
+                <div class="overlay-panel overlay-right">
+
+                    <h1>
+                        Hello, Friend!
+                    </h1>
+
+                    <p>
+                        Enter your personal details
+                        and Sign-In.
+                    </p>
+
+                    <button class="ghost" id="signUp" type="button">
+                        Sign Up
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <footer>
+
+        <p>
+
+            Created with
+
+            <i class="fa-solid fa-heart"></i>
+
+            by
+
+            <a target="_blank" href="https://florin-pop.com">
+                Florin Pop
+            </a>
+
+        </p>
+
+    </footer>
+
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="{{ url_for('static', filename='js/firebase-config.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/google-auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+    <!-- Panel Toggle Script -->
+    <script>
+
+        const signUpButton =
+            document.getElementById("signUp");
+
+        const signInButton =
+            document.getElementById("signIn");
+
+        const container =
+            document.getElementById("container");
+
+
+        // Open Sign Up panel
+
+        signUpButton.addEventListener(
+            "click",
+            () => {
+
+                container.classList.add(
+                    "right-panel-active"
+                );
+                window.history.pushState({}, "", "/register");
+
+            }
+        );
+
+
+        // Open Sign In panel
+
+        signInButton.addEventListener(
+            "click",
+            () => {
+
+                container.classList.remove(
+                    "right-panel-active"
+                );
+                window.history.pushState({}, "", "/login");
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>

@@ -4,58 +4,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+
+    <title>Dashboard</title>
+
+    <!-- Montserrat Font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-    <div class="container home-container">
+    <!-- Background decoration -->
 
-        <h1>Welcome</h1>
+    <div class="background-shape shape-one"></div>
+    <div class="background-shape shape-two"></div>
 
-        <div class="card">
-            <h2>Hello, {{name}}!</h2>
-            <p>You have successfully logged in.</p>
-        </div>
 
-        <div class="card">
-            <h2>Active Sessions</h2>
+    <main class="dashboard">
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Device</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
+        <!-- Header -->
 
-                <tbody>
-                    {% for s in sessions %}
-                    <tr>
-                        <td>{{ s[2] }} <br><small style="color: gray; font-size: 0.8em;">Started: {{ s[4] }}</small></td>
-                        <td>{{ s[3] }}</td>
-                        <td>
-                            {% if s[0]|int == current_session_id|int %}
-                                <span style="color: #4CAF50; font-weight: bold;">Current Session</span>
-                            {% else %}
-                                <span>Active</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="3">No active sessions found.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <header class="dashboard-header">
 
-        <button class="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+            <div class="brand">
 
-    </div>
+                <div class="brand-icon">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+
+                <div>
+                    <h2>Secure<span>App</span></h2>
+
+                    <p>
+                        Account Security Dashboard
+                    </p>
+                </div>
+
+            </div>
+
+
+            <button class="logout-btn" onclick="window.location.href='/logout'">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                Logout
+
+            </button>
+
+        </header>
+
+
+        <!-- Welcome section -->
+
+        <section class="welcome-card">
+
+            <div class="welcome-content">
+
+                <div class="welcome-badge">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Authenticated
+
+                </div>
+
+
+                <h1>
+
+                    Welcome back,
+
+                    <span>{{ name }}</span>
+
+                </h1>
+
+
+                <p>
+
+                    You have successfully logged in.
+                    Your account is active and protected.
+
+                </p>
+
+            </div>
+
+
+            <div class="welcome-icon">
+
+                <i class="fa-solid fa-user-shield"></i>
+
+            </div>
+
+        </section>
+
+
+        <!-- Sessions -->
+
+        <section class="sessions-card">
+
+
+            <div class="section-header">
+
+                <div>
+
+                    <div class="section-title">
+
+                        <div class="title-icon">
+
+                            <i class="fa-solid fa-laptop"></i>
+
+                        </div>
+
+
+                        <div>
+
+                            <h2>
+                                Active Sessions
+                            </h2>
+
+                            <p>
+                                Devices currently signed into your account
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="session-count">
+
+                    <i class="fa-solid fa-circle"></i>
+
+                    {{ sessions|length }}
+
+                    Active
+
+                </div>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Device
+                            </th>
+
+                            <th>
+                                Location
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for s in sessions %}
+
+                        <tr>
+
+
+                            <!-- Device -->
+
+                            <td>
+
+                                <div class="device-info">
+
+                                    <div class="device-icon">
+
+                                        <i class="fa-solid fa-desktop"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ s[2] }}
+                                        </strong>
+
+
+                                        <small>
+
+                                            <i class="fa-regular fa-clock"></i>
+
+                                            Started:
+
+                                            {{ s[4] }}
+
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Location -->
+
+                            <td>
+
+                                <div class="location">
+
+                                    <i class="fa-solid fa-location-dot"></i>
+
+                                    {{ s[3] }}
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- Status -->
+
+                            <td>
+
+                                {% if s[0]|int == current_session_id|int %}
+
+                                <span class="status current">
+
+                                    <i class="fa-solid fa-check"></i>
+
+                                    Current Session
+
+                                </span>
+
+                                {% else %}
+
+                                <span class="status active">
+
+                                    <span class="status-dot"></span>
+
+                                    Active
+
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+
+                        {% else %}
+
+
+                        <!-- No sessions -->
+
+                        <tr>
+
+                            <td colspan="3" class="empty-state">
+
+                                <div>
+
+                                    <i class="fa-solid fa-laptop-slash"></i>
+
+                                    <h3>
+                                        No active sessions
+                                    </h3>
+
+                                    <p>
+                                        No active login sessions were found.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
 
 </body>
 

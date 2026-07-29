@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     let passwordInput = document.getElementById("password");
     let confirmPasswordInput = document.getElementById("confirm_password");
     let message = document.getElementById("message");
@@ -17,21 +17,21 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             let weakStatus = regex.test(passwordInput.value)
             console.log(weakStatus)
-            if(weakStatus == true){
-                message.innerText = "strong password"
+            if (weakStatus == true) {
+                message.innerText = "Account Created Successfully"
                 return true;
             }
-            else{
-                message.innerText = "weak password"
+            else {
+                message.innerText = "weak password please try different password"
                 return false;
             }
         }
     }
 
     if (registerButton) {
-        registerButton.addEventListener("click", function(event) {
+        registerButton.addEventListener("click", function (event) {
             event.preventDefault();
-            if(validatePassword()) {
+            if (validatePassword()) {
                 registraionForm.submit();
             }
         });

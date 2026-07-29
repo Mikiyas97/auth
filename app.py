@@ -21,8 +21,7 @@ from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from loginllama import LoginLlama
 from werkzeug.security import check_password_hash, generate_password_hash
-
-
+from user_agents import parse
 load_dotenv()
 
 app = Flask(__name__)
@@ -152,10 +151,22 @@ def risk_score_check(user_email, user_agent, ip_address):
 
 
 def get_device_info(request_obj):
-    platform = request_obj.user_agent.platform
-    browser = request_obj.user_agent.browser
-    os_name = platform.title() if platform else "Unknown OS"
-    browser_name = browser.title() if browser else "Unknown Browser"
+    user_agent_string = request_obj.user_agent.string
+    user_agent = parse(user_agent_string)
+    
+    os_name = user_agent.os.family
+    if user_agent.os.version_string:
+        os_name += f" {user_agent.os.version_string}"
+        
+    browser_name = user_agent.browser.family
+    if user_agent.browser.version_string:
+        browser_name += f" {user_agent.browser.version_string}"
+        
+    if os_name == "Other":
+        os_name = "Unknown OS"
+    if browser_name == "Other":
+        browser_name = "Unknown Browser"
+        
     return f"{os_name} ({browser_name})"
 
 @jwt.expired_token_loader
@@ -210,15 +221,15 @@ def register():
         password = request.form.get("password", "")
 
         if not is_strong_password(password):
-            return render_template("register.html", error="Password is not strong.")
+            return render_template("index.html", error="Password is not strong.", show_register=True)
 
         try:
             create_user(name, email, password)
             return redirect(url_for("login"))
         except sqlite3.IntegrityError:
-            return "Email already exists."
+            return render_template("index.html", error="Email already exists.", show_register=True)
 
-    return render_template("register.html")
+    return render_template("index.html", show_register=True)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -236,7 +247,7 @@ def login():
             ip_address=request.remote_addr,
         )
         if risk_score:
-            return render_template("login.html", error="Risk score is too high.")
+            return render_template("index.html", error="Risk score is too high.", show_register=False)
 
         if user and check_password_hash(user[3], password):
             device = get_device_info(request)
@@ -255,9 +266,9 @@ def login():
             set_refresh_cookies(response, refresh_token)
             return response
 
-        return render_template("login.html", error="Invalid email or password.")
+        return render_template("index.html", error="Invalid email or password.", show_register=False)
 
-    return render_template("login.html")
+    return render_template("index.html", show_register=False)
 
 
 @app.route("/google-login", methods=["POST"])
